@@ -15,6 +15,7 @@ class OnderonPlayer extends Player
     protected $opponentSide;
     protected $result;
     protected $beat = ['scissors' => 'parent::rockChoice()', 'rock' => 'parent::paperChoice()', 'paper' => 'parent::scissorsChoice()'];
+    protected $inverted = false;
 
     public function getChoice()
     {
@@ -25,8 +26,20 @@ class OnderonPlayer extends Player
         }
         $myLastChoice = $this->result->getLastChoiceFor($this->mySide);
         $opponentLastChoice = $this->result->getLastChoiceFor($this->opponentSide);
+
+        if ($this->result->getNbRound() == 100) {
+            $myScore = $this->result->getStatsFor($this->mySide)['score'];
+            $opponentScore = $this->result->getStatsFor($this->opponentSide)['score'];
+            if ($opponentScore > $myScore) {
+                $this->inverted = true;
+            }
+        }
+
         switch ($scores[$length - 1]) {
             case 0: //lost
+                if ($this->inverted) {
+                    $opponentLastChoice = $myLastChoice;
+                }
                 switch ($opponentLastChoice) {
                     case 'paper':
                         return parent::scissorsChoice();
@@ -36,7 +49,10 @@ class OnderonPlayer extends Player
                         return parent::rockChoice();
                 }
                 break;
-            case 5: // won
+            case 3: // won
+                if ($this->inverted) {
+                    $myLastChoice = $opponentLastChoice;
+                }
                 switch ($myLastChoice) {
                     case 'paper':
                         return parent::scissorsChoice();
