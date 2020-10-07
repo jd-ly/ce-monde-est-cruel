@@ -6,6 +6,14 @@ use Hackathon\Game\Result;
 
 /**
  * Class OnderonPlayers
+ *
+ * General tactic:
+ *
+ * If lose, switch to the thing that beats the thing the opponent just played.
+ * If win, switch to the thing that would beat the thing that you played.
+ * If tie, I have no idea
+ * Add many counter
+ *
  * @package Hackathon\PlayerIA
  * @author Jean Damien Ly
  */
@@ -26,7 +34,7 @@ class OnderonPlayer extends Player
         $scores = $this->result->getScoresFor($this->mySide);
         $length = count($scores);
         if ($length == 0) {
-            return parent::rockChoice();
+            return parent::paperChoice();
         }
         $myLastChoice = $this->result->getLastChoiceFor($this->mySide);
         $opponentLastChoice = $this->result->getLastChoiceFor($this->opponentSide);
@@ -44,6 +52,7 @@ class OnderonPlayer extends Player
 
         $nbRound = $this->result->getNbRound();
 
+        // Detects randoms
         if ($nbRound % 30 == 0) {
             if (($this->opponentP <= 11 * ($nbRound / 30) && $this->opponentP >= 9 * ($nbRound / 30))
                 && ($this->opponentR <= 11 * ($nbRound / 30) && $this->opponentR >= 9 * ($nbRound / 30))
@@ -52,6 +61,7 @@ class OnderonPlayer extends Player
             }
         }
 
+        // Counter heavy opponent choice
         if ($this->opponentR + $this->opponentP < $this->opponentS) {
             return parent::rockChoice();
         }
@@ -62,6 +72,7 @@ class OnderonPlayer extends Player
             return parent::scissorsChoice();
         }
 
+        // Counter randoms
         if ($this->random) {
             if ($this->opponentR < $this->opponentP && $this->opponentR < $this->opponentS) {
                 return parent::paperChoice();
@@ -86,6 +97,8 @@ class OnderonPlayer extends Player
             return parent::scissorsChoice();
         }
 
+
+        // Invert if opponent is countering current method
         if ($nbRound % 50 == 0) {
             $myScore = $this->result->getStatsFor($this->mySide)['score'];
             $opponentScore = $this->result->getStatsFor($this->opponentSide)['score'];
