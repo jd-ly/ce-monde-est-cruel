@@ -86,11 +86,11 @@ class OnderonPlayer extends Player
             return parent::scissorsChoice();
         }
 
-        if ($nbRound == 100) {
+        if ($nbRound % 50 == 0) {
             $myScore = $this->result->getStatsFor($this->mySide)['score'];
             $opponentScore = $this->result->getStatsFor($this->opponentSide)['score'];
             if ($opponentScore > $myScore) {
-                $this->inverted = true;
+                $this->inverted = !$this->inverted;
             }
         }
 
