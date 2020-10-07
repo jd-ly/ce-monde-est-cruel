@@ -32,7 +32,7 @@ class OnderonPlayer extends Player
                         return parent::scissorsChoice();
                     case 'rock':
                         return parent::paperChoice();
-                    case 'scissor':
+                    case 'scissors':
                         return parent::rockChoice();
                 }
                 break;
@@ -42,7 +42,7 @@ class OnderonPlayer extends Player
                         return parent::scissorsChoice();
                     case 'rock':
                         return parent::paperChoice();
-                    case 'scissor':
+                    case 'scissors':
                         return parent::rockChoice();
                 }
                 break;
@@ -52,7 +52,7 @@ class OnderonPlayer extends Player
                         return parent::scissorsChoice();
                     case 'rock':
                         return parent::paperChoice();
-                    case 'scissor':
+                    case 'scissors':
                         return parent::rockChoice();
                 }
                 break;
