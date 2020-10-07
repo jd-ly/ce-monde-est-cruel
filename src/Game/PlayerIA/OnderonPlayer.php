@@ -12,7 +12,7 @@ use Hackathon\Game\Result;
  * If lose, switch to the thing that beats the thing the opponent just played.
  * If win, switch to the thing that would beat the thing that you played.
  * If tie, I have no idea
- * Add many counter
+ * Add many counter tactics
  *
  * @package Hackathon\PlayerIA
  * @author Jean Damien Ly
@@ -34,7 +34,7 @@ class OnderonPlayer extends Player
         $scores = $this->result->getScoresFor($this->mySide);
         $length = count($scores);
         if ($length == 0) {
-            return parent::paperChoice();
+            return parent::rockChoice();
         }
         $myLastChoice = $this->result->getLastChoiceFor($this->mySide);
         $opponentLastChoice = $this->result->getLastChoiceFor($this->opponentSide);
