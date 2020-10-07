@@ -7,14 +7,14 @@ use Hackathon\Game\Result;
 /**
  * Class OnderonPlayers
  * @package Hackathon\PlayerIA
- * @author YOUR NAME HERE
+ * @author Jean Damien Ly
  */
 class OnderonPlayer extends Player
 {
     protected $mySide;
     protected $opponentSide;
     protected $result;
-    protected $beat = ['parent::rockChoice()', 'parent::paperChoice()', 'parent::scissorsChoice()'];
+    protected $beat = ['scissors' => 'parent::rockChoice()', 'rock' => 'parent::paperChoice()', 'paper' => 'parent::scissorsChoice()'];
 
     public function getChoice()
     {
@@ -47,13 +47,23 @@ class OnderonPlayer extends Player
                 }
                 break;
             case 1: //tie
-                switch ($myLastChoice) {
+                if ($length == 1) {
+                    switch ($myLastChoice) {
+                        case 'paper':
+                            return parent::rockChoice();
+                        case 'rock':
+                            return parent::scissorsChoice();
+                        case 'scissors':
+                            return parent::paperChoice();
+                    }
+                }
+                switch ($scores[$length - 2]) {
                     case 'paper':
-                        return parent::scissorsChoice();
-                    case 'rock':
-                        return parent::paperChoice();
-                    case 'scissors':
                         return parent::rockChoice();
+                    case 'rock':
+                        return parent::scissorsChoice();
+                    case 'scissors':
+                        return parent::paperChoice();
                 }
                 break;
         }
