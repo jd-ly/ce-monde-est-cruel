@@ -90,34 +90,46 @@ class OnderonPlayer extends Player
             $myScore = $this->result->getStatsFor($this->mySide)['score'];
             $opponentScore = $this->result->getStatsFor($this->opponentSide)['score'];
             if ($opponentScore > $myScore) {
-                $this->inverted = false;
+                $this->inverted = true;
             }
         }
 
         switch ($scores[$length - 1]) {
             case 0: //lost
-                if ($this->inverted) {
-                    $opponentLastChoice = $myLastChoice;
-                }
                 switch ($opponentLastChoice) {
                     case 'paper':
+                        if ($this->inverted) {
+                            return parent::paperChoice();
+                        }
                         return parent::scissorsChoice();
                     case 'rock':
+                        if ($this->inverted) {
+                            return parent::rockChoice();
+                        }
                         return parent::paperChoice();
                     case 'scissors':
+                        if ($this->inverted) {
+                            return parent::scissorsChoice();
+                        }
                         return parent::rockChoice();
                 }
                 break;
             case 3: // won
-                if ($this->inverted) {
-                    $myLastChoice = $opponentLastChoice;
-                }
                 switch ($myLastChoice) {
                     case 'paper':
+                        if ($this->inverted) {
+                            return parent::paperChoice();
+                        }
                         return parent::scissorsChoice();
                     case 'rock':
+                        if ($this->inverted) {
+                            return parent::rockChoice();
+                        }
                         return parent::paperChoice();
                     case 'scissors':
+                        if ($this->inverted) {
+                            return parent::scissorsChoice();
+                        }
                         return parent::rockChoice();
                 }
                 break;
@@ -134,13 +146,39 @@ class OnderonPlayer extends Player
                 }
                 switch ($scores[$length - 2]) {
                     case 'paper':
+                        if ($this->inverted) {
+                            return parent::paperChoice();
+                        }
                         return parent::rockChoice();
                     case 'rock':
+                        if ($this->inverted) {
+                            return parent::rockChoice();
+                        }
                         return parent::scissorsChoice();
                     case 'scissors':
+                        if ($this->inverted) {
+                            return parent::scissorsChoice();
+                        }
                         return parent::paperChoice();
                 }
                 break;
+        }
+        switch ($opponentLastChoice) {
+            case 'paper':
+                if ($this->inverted) {
+                    return parent::paperChoice();
+                }
+                return parent::rockChoice();
+            case 'rock':
+                if ($this->inverted) {
+                    return parent::rockChoice();
+                }
+                return parent::scissorsChoice();
+            case 'scissors':
+                if ($this->inverted) {
+                    return parent::scissorsChoice();
+                }
+                return parent::paperChoice();
         }
         return parent::paperChoice();
     }
