@@ -16,6 +16,10 @@ class OnderonPlayer extends Player
     protected $result;
     protected $beat = ['scissors' => 'parent::rockChoice()', 'rock' => 'parent::paperChoice()', 'paper' => 'parent::scissorsChoice()'];
     protected $inverted = false;
+    protected $opponentR = 0;
+    protected $opponentP = 0;
+    protected $opponentS = 0;
+    protected $random = false;
 
     public function getChoice()
     {
@@ -27,7 +31,62 @@ class OnderonPlayer extends Player
         $myLastChoice = $this->result->getLastChoiceFor($this->mySide);
         $opponentLastChoice = $this->result->getLastChoiceFor($this->opponentSide);
 
-        if ($this->result->getNbRound() == 100) {
+        switch ($opponentLastChoice) {
+            case 'rock':
+                $this->opponentR++;
+                break;
+            case 'paper':
+                $this->opponentP++;
+                break;
+            case 'scissors':
+                $this->opponentS++;
+        }
+
+        $nbRound = $this->result->getNbRound();
+
+        if ($nbRound == 30) {
+            if (($this->opponentP <= 11 && $this->opponentP >= 9)
+                && ($this->opponentR <= 11 && $this->opponentR >= 9)
+                && ($this->opponentS <= 11 && $this->opponentS >= 9)) {
+                $this->random = true;
+            }
+        }
+
+        if ($this->opponentR + $this->opponentP < $this->opponentS) {
+            return parent::rockChoice();
+        }
+        if ($this->opponentP + $this->opponentS < $this->opponentR) {
+            return parent::paperChoice();
+        }
+        if ($this->opponentS + $this->opponentR < $this->opponentP) {
+            return parent::scissorsChoice();
+        }
+
+        if ($this->random) {
+            if ($this->opponentR < $this->opponentP && $this->opponentR < $this->opponentS) {
+                return parent::paperChoice();
+            }
+            if ($this->opponentP < $this->opponentR && $this->opponentP < $this->opponentS) {
+                return parent::scissorsChoice();
+            }
+            if ($this->opponentS < $this->opponentP && $this->opponentS < $this->opponentR) {
+                return parent::rockChoice();
+            }
+
+            if ($this->opponentR == $this->opponentP && $this->opponentR < $this->opponentS) {
+                return parent::paperChoice();
+            }
+            if ($this->opponentR == $this->opponentS && $this->opponentR < $this->opponentP) {
+                return parent::rockChoice();
+            }
+            if ($this->opponentS == $this->opponentP && $this->opponentS < $this->opponentR) {
+                return parent::scissorsChoice();
+            }
+
+            return parent::scissorsChoice();
+        }
+
+        if ($nbRound == 100) {
             $myScore = $this->result->getStatsFor($this->mySide)['score'];
             $opponentScore = $this->result->getStatsFor($this->opponentSide)['score'];
             if ($opponentScore > $myScore) {
