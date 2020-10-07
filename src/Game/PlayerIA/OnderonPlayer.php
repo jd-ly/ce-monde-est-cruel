@@ -44,10 +44,10 @@ class OnderonPlayer extends Player
 
         $nbRound = $this->result->getNbRound();
 
-        if ($nbRound == 30) {
-            if (($this->opponentP <= 11 && $this->opponentP >= 9)
-                && ($this->opponentR <= 11 && $this->opponentR >= 9)
-                && ($this->opponentS <= 11 && $this->opponentS >= 9)) {
+        if ($nbRound % 30 == 0) {
+            if (($this->opponentP <= 11 * ($nbRound / 30) && $this->opponentP >= 9 * ($nbRound / 30))
+                && ($this->opponentR <= 11 * ($nbRound / 30) && $this->opponentR >= 9 * ($nbRound / 30))
+                && ($this->opponentS <= 11 * ($nbRound / 30) && $this->opponentS >= 9 * ($nbRound / 30))) {
                 $this->random = true;
             }
         }
@@ -90,7 +90,7 @@ class OnderonPlayer extends Player
             $myScore = $this->result->getStatsFor($this->mySide)['score'];
             $opponentScore = $this->result->getStatsFor($this->opponentSide)['score'];
             if ($opponentScore > $myScore) {
-                $this->inverted = true;
+                $this->inverted = false;
             }
         }
 
